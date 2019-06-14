@@ -1,0 +1,59 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  - master
+
+variables:
+  azureServiceConnection: 'VseARM Svc Pcpl RapidAPIDev2RG Service Connect'
+  azureFuncApp: RapidAPIDev2FApp
+
+stages:
+  - stage: Build_1
+    displayName: 'Build Stage'
+    jobs:
+      - job: build
+        displayName: 'Build Node.js app'
+        pool:
+          vmImage: 'Ubuntu-16.04'
+
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '8.x'
+            displayName: 'Install Node.js'
+
+          - script: |
+              npm install
+              # npm run build
+            displayName: 'npm install and build'
+
+          - script: npm install -g azure-functions-pack
+            displayName: 'Funcpak install'
+
+          - task: CopyFiles@2
+            displayName: 'Copy necessary files'
+            inputs:
+              SourceFolder: '$(System.DefaultWorkingDirectory)'
+              Contents: |
+                **/*
+                !.vscode/**/*
+                !.prettierrc.json
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/copied'
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish artifact'
+            enabled: false
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)/copied'
+
+          - task: AzureRMWebAppDeployment@4
+            displayName: 'AzureRM Function App deploy'
+            inputs:
+              ConnectionType: 'AzureRM'
+              ConnectedServiceName: $(azureServiceConnection)
+              WebAppKind: 'Function App'
+              WebAppName: $(azureFuncApp)
+              Package: '$(Build.ArtifactStagingDirectory)/copied'
