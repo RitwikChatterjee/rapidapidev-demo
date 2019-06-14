@@ -1,0 +1,548 @@
+---
+swagger: "2.0"
+info:
+  description: "Manage users"
+  version: "1.0"
+  title: "User API"
+host: "localhost:8080"
+basePath: "/v1"
+tags:
+- name: "bucket"
+  description: "Bucket related APIs"
+- name: "account"
+  description: "Account related APIs"
+- name: "user"
+  description: "User related APIs"
+schemes:
+- "http"
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /users:
+    get:
+      tags:
+      - "user"
+      summary: "List User"
+      operationId: "findUsers"
+      parameters: []
+      responses:
+        200:
+          description: ""
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/user-output"
+      x-swagger-router-controller: "User"
+    post:
+      tags:
+      - "user"
+      summary: "Create User"
+      operationId: "createUser"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/user-input"
+      responses:
+        201:
+          description: ""
+          schema:
+            $ref: "#/definitions/user-output-detailed"
+      x-swagger-router-controller: "User"
+  /users/{userId}:
+    get:
+      tags:
+      - "user"
+      summary: "Get User"
+      operationId: "getUser"
+      parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: ""
+          examples:
+            application/json:
+              created: "1967-01-23T17:26:44.767Z"
+              id: 962
+              name: "jane"
+              email: "jane@mail.com"
+              type: "primary"
+              primaryUser: 962
+              primaryRelation: "self"
+          schema:
+            $ref: "#/definitions/user-output-detailed"
+      x-swagger-router-controller: "User"
+    put:
+      tags:
+      - "user"
+      summary: "Update User"
+      operationId: "updateUser"
+      parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/user-input"
+      responses:
+        200:
+          description: ""
+          examples:
+            application/json:
+              created: "2000-04-26T22:57:11.909Z"
+              id: 4248628
+              name: "non ipsum"
+              email: "ipsum veniam sed et est"
+              type: "secondary"
+              primaryUser: -9318517
+              primaryRelation: "dolore"
+          schema:
+            $ref: "#/definitions/user-output-detailed"
+      x-swagger-router-controller: "User"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete User"
+      operationId: "deleteUser"
+      parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: ""
+      x-swagger-router-controller: "User"
+  /accounts:
+    get:
+      tags:
+      - "account"
+      summary: "List Account"
+      operationId: "findAccounts"
+      parameters: []
+      responses:
+        200:
+          description: ""
+          examples:
+            application/json:
+            - accId: 62593971
+              created: "1981-09-08T10:37:23.335Z"
+              type: "rd"
+              number: "est"
+              finInstitution: "in est nulla ut"
+              owners:
+              - "Lorem quis anim eu "
+              - "id"
+              - "veni"
+              - "non Lorem"
+              - "adipisicing sit"
+              currency: "dolor dolor ut enim"
+              openDate: "2017-04-03"
+              maturityDate: "2000-06-21"
+              status: "active"
+            - accId: -77516048
+              created: "2018-10-14T07:53:06.524Z"
+              type: "savings"
+              number: "dolor Duis enim"
+              finInstitution: "in ut officia"
+              owners:
+              - "occaecat ad nostrud nulla officia"
+              - "reprehenderit ut nulla"
+              currency: "voluptate quis"
+              openDate: "1968-12-26"
+              maturityDate: "1946-06-17"
+              status: "active"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/account-output"
+      x-swagger-router-controller: "Account"
+    post:
+      tags:
+      - "account"
+      summary: "Create Account"
+      operationId: "createAccount"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/account-input"
+      responses:
+        201:
+          description: ""
+          schema:
+            $ref: "#/definitions/account-output-detailed"
+      x-swagger-router-controller: "Account"
+  /accounts/{accountId}:
+    get:
+      tags:
+      - "account"
+      summary: "Get Account"
+      operationId: "getAccount"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/account-output-detailed"
+      x-swagger-router-controller: "Account"
+    put:
+      tags:
+      - "account"
+      summary: "Update Account"
+      operationId: "updateAccount"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/account-input"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/account-output-detailed"
+      x-swagger-router-controller: "Account"
+    delete:
+      tags:
+      - "account"
+      summary: "Delete Account"
+      operationId: "deleteAccount"
+      parameters:
+      - name: "accountId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: ""
+      x-swagger-router-controller: "Account"
+  /users/{userId}/buckets:
+    get:
+      tags:
+      - "bucket"
+      summary: "List Bucket"
+      operationId: "findBuckets"
+      parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/bucket-output"
+      x-swagger-router-controller: "Bucket"
+    post:
+      tags:
+      - "bucket"
+      summary: "Create Bucket"
+      operationId: "createBucket"
+      parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/bucket-input"
+      responses:
+        201:
+          description: ""
+          schema:
+            $ref: "#/definitions/bucket-output-detailed"
+      x-swagger-router-controller: "Bucket"
+  /users/{userId}/buckets/{bucketId}:
+    get:
+      tags:
+      - "bucket"
+      summary: "Get Bucket"
+      operationId: "getBucket"
+      parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "bucketId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: ""
+          examples:
+            application/json:
+              bucketId: 29802364
+              balances:
+                available: -47121.4300000000002910383045673370361328125
+                total: 11865.030000000000654836185276508331298828125
+              name: "personal"
+              currency: "USD"
+              description: "Personal expenses"
+          schema:
+            $ref: "#/definitions/bucket-output-detailed"
+      x-swagger-router-controller: "Bucket"
+    put:
+      tags:
+      - "bucket"
+      summary: "Update Bucket"
+      operationId: "updateBucket"
+      parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "bucketId"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/bucket-input"
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: "#/definitions/bucket-output-detailed"
+      x-swagger-router-controller: "Bucket"
+    delete:
+      tags:
+      - "bucket"
+      summary: "Delete Bucket"
+      operationId: "deleteBucket"
+      parameters:
+      - name: "userId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "bucketId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: ""
+      x-swagger-router-controller: "Bucket"
+definitions:
+  user-common:
+    type: "object"
+    required:
+    - "email"
+    - "name"
+    - "type"
+    properties:
+      name:
+        type: "string"
+        description: "Name of the user"
+      email:
+        type: "string"
+        description: "email address"
+      type:
+        type: "string"
+        description: "Whether Primary or Secondary user type"
+        enum:
+        - "primary"
+        - "secondary"
+      primaryUser:
+        type: "integer"
+        description: "If the user is not primary, who is the primary for this user?"
+      primaryRelation:
+        type: "string"
+        description: "Relationship with primary"
+    title: "User Common"
+    description: "The properties that are shared amongst all versions of the User\
+      \ model."
+  user-input:
+    title: "User Input"
+    allOf:
+    - $ref: "#/definitions/user-common"
+    - type: "object"
+    description: "The properties that are allowed when creating or updating a User."
+  user-output:
+    title: "User Output"
+    allOf:
+    - type: "object"
+      required:
+      - "created"
+      - "id"
+      properties:
+        created:
+          type: "string"
+          format: "date-time"
+        id:
+          type: "integer"
+    - $ref: "#/definitions/user-common"
+    description: "The properties that are included when fetching a list of Users."
+  user-output-detailed:
+    title: "User Output Detailed"
+    allOf:
+    - $ref: "#/definitions/user-output"
+    - type: "object"
+    description: "The properties that are included when fetching a single User."
+  account-common:
+    type: "object"
+    required:
+    - "currency"
+    - "finInstitution"
+    - "number"
+    - "openDate"
+    - "owners"
+    - "type"
+    properties:
+      type:
+        type: "string"
+        description: "Type of (bank) account"
+        enum:
+        - "savings"
+        - "checking"
+        - "fd"
+        - "rd"
+      number:
+        type: "string"
+        description: "Account number with the Financial Institution"
+      finInstitution:
+        type: "string"
+        description: "Financial Institution where it is held"
+      owners:
+        type: "array"
+        description: "Account owner(s)"
+        items:
+          type: "string"
+      currency:
+        type: "string"
+        description: "Currency for the account"
+      openDate:
+        type: "string"
+        format: "date"
+        description: "When was the account opened"
+      maturityDate:
+        type: "string"
+        format: "date"
+        description: "Maturity or Close date for the account"
+      status:
+        type: "string"
+        description: "Whether active, closed, frozen or other status"
+        enum:
+        - "active"
+        - "closed"
+        - "frozen"
+    title: "Account Common"
+    description: "The properties that are shared amongst all versions of the Account\
+      \ model."
+  account-input:
+    title: "Account Input"
+    allOf:
+    - $ref: "#/definitions/account-common"
+    - type: "object"
+    description: "The properties that are allowed when creating or updating a Account."
+  account-output:
+    title: "Account Output"
+    allOf:
+    - type: "object"
+      required:
+      - "accId"
+      - "created"
+      properties:
+        accId:
+          type: "integer"
+        created:
+          type: "string"
+          format: "date-time"
+    - $ref: "#/definitions/account-common"
+    description: "The properties that are included when fetching a list of Accounts."
+  account-output-detailed:
+    title: "Account Output Detailed"
+    allOf:
+    - $ref: "#/definitions/account-output"
+    - type: "object"
+    description: "The properties that are included when fetching a single Account."
+  bucket-common:
+    type: "object"
+    required:
+    - "balances"
+    - "currency"
+    - "name"
+    properties:
+      name:
+        type: "string"
+        description: "Name of the bucket"
+      description:
+        type: "string"
+        description: "Description/purpose of the bucket"
+      currency:
+        type: "string"
+        description: "Currency of the bucket"
+      balances:
+        $ref: "#/definitions/bucketcommon_balances"
+    title: "Bucket Common"
+    description: "The properties that are shared amongst all versions of the Bucket\
+      \ model."
+  bucket-input:
+    title: "Bucket Input"
+    allOf:
+    - $ref: "#/definitions/bucket-common"
+    - type: "object"
+      required:
+      - "balances"
+      properties:
+        balances: {}
+    description: "The properties that are allowed when creating or updating a Bucket."
+  bucket-output:
+    title: "Bucket Output"
+    allOf:
+    - type: "object"
+      required:
+      - "balances"
+      - "bucketId"
+      properties:
+        bucketId:
+          type: "integer"
+        balances: {}
+    - $ref: "#/definitions/bucket-common"
+    description: "The properties that are included when fetching a list of Buckets."
+  bucket-output-detailed:
+    title: "Bucket Output Detailed"
+    allOf:
+    - $ref: "#/definitions/bucket-output"
+    - type: "object"
+    description: "The properties that are included when fetching a single Bucket."
+  bucketcommon_balances:
+    required:
+    - "available"
+    - "total"
+    properties:
+      available:
+        type: "number"
+        format: "float"
+        description: "Available balance = Cash in hand"
+      total:
+        type: "number"
+        format: "float"
+        description: "Total = Available balance + invested amount"
+    description: "Various running balances for the bucket"
