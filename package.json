@@ -14,7 +14,7 @@
   "private": true,
   "dependencies": {
     "azure-function-express": "^2.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "js-yaml": "^3.3.0",
     "swagger-tools": "^0.10.4"
   }
